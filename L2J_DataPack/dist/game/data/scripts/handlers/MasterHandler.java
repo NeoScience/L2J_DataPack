@@ -84,6 +84,7 @@ import handlers.admincommandhandlers.AdminPcCondOverride;
 import handlers.admincommandhandlers.AdminPetition;
 import handlers.admincommandhandlers.AdminPledge;
 import handlers.admincommandhandlers.AdminPolymorph;
+import handlers.admincommandhandlers.AdminPrimePoints;
 import handlers.admincommandhandlers.AdminPunishment;
 import handlers.admincommandhandlers.AdminQuest;
 import handlers.admincommandhandlers.AdminReload;
@@ -153,6 +154,7 @@ import handlers.communityboard.HomepageBoard;
 import handlers.communityboard.MailBoard;
 import handlers.communityboard.MemoBoard;
 import handlers.communityboard.RegionBoard;
+import handlers.itemhandlers.Appearance;
 import handlers.itemhandlers.BeastSoulShot;
 import handlers.itemhandlers.BeastSpiritShot;
 import handlers.itemhandlers.BlessedSpiritShot;
@@ -371,6 +373,7 @@ public class MasterHandler
 			AdminPForge.class,
 			AdminPledge.class,
 			AdminPolymorph.class,
+			AdminPrimePoints.class,
 			AdminPunishment.class,
 			AdminQuest.class,
 			AdminReload.class,
@@ -453,6 +456,7 @@ public class MasterHandler
 		},
 		{
 			// Item Handlers
+			Appearance.class,
 			BeastSoulShot.class,
 			BeastSpiritShot.class,
 			BlessedSpiritShot.class,

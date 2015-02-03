@@ -18,22 +18,18 @@
  */
 package instances.CavernOfThePirateCaptain;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import instances.AbstractInstance;
 
-import ai.npc.AbstractNpcAI;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.l2jserver.gameserver.instancemanager.InstanceManager;
 import com.l2jserver.gameserver.model.L2Party;
-import com.l2jserver.gameserver.model.L2World;
 import com.l2jserver.gameserver.model.Location;
 import com.l2jserver.gameserver.model.PcCondOverride;
 import com.l2jserver.gameserver.model.actor.L2Attackable;
 import com.l2jserver.gameserver.model.actor.L2Npc;
-import com.l2jserver.gameserver.model.actor.L2Summon;
 import com.l2jserver.gameserver.model.actor.instance.L2PcInstance;
-import com.l2jserver.gameserver.model.entity.Instance;
 import com.l2jserver.gameserver.model.instancezone.InstanceWorld;
 import com.l2jserver.gameserver.network.NpcStringId;
 import com.l2jserver.gameserver.network.SystemMessageId;
@@ -43,16 +39,16 @@ import com.l2jserver.gameserver.network.serverpackets.SystemMessage;
  * Cavern Of The Pirate Captain (Day Dream) instance Zone.
  * @author St3eT
  */
-public class CavernOfThePirateCaptain extends AbstractNpcAI
+public final class CavernOfThePirateCaptain extends AbstractInstance
 {
 	protected class CavernOfThePirateCaptainWorld extends InstanceWorld
 	{
-		List<L2PcInstance> playersInside = new ArrayList<>();
-		L2Attackable _zaken;
-		long storeTime = 0;
-		boolean _is83;
-		int _zakenRoom;
-		int _blueFounded;
+		protected List<L2PcInstance> playersInside = new ArrayList<>();
+		protected L2Attackable _zaken;
+		protected long storeTime = 0;
+		protected boolean _is83;
+		protected int _zakenRoom;
+		protected int _blueFounded;
 	}
 	
 	// NPCs
@@ -71,9 +67,6 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 	// Items
 	private static final int VORPAL_RING = 15763; // Sealed Vorpal Ring
 	private static final int VORPAL_EARRING = 15764; // Sealed Vorpal Earring
-	private static final int FIRE = 15280; // Transparent 1HS (for NPC)
-	private static final int RED = 15281; // Transparent 1HS (for NPC)
-	private static final int BLUE = 15302; // Transparent Bow (for NPC)
 	// Locations
 	private static final Location[] ENTER_LOC =
 	{
@@ -132,11 +125,6 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 	private static final int PLAYERS_83_MAX = 27;
 	private static final int TEMPLATE_ID_60 = 133;
 	private static final int TEMPLATE_ID_83 = 135;
-	private static final int HOURS = 6;
-	private static final int MINUTES = 30;
-	private static final int DAY_A = Calendar.MONDAY;
-	private static final int DAY_B = Calendar.WEDNESDAY;
-	private static final int DAY_C = Calendar.FRIDAY;
 	//@formatter:off
 	private static final int[][] ROOM_DATA =
 	{
@@ -161,39 +149,22 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 	};
 	//@formatter:on
 	
-	private CavernOfThePirateCaptain()
+	public CavernOfThePirateCaptain()
 	{
-		super(CavernOfThePirateCaptain.class.getSimpleName(), "instances");
+		super(CavernOfThePirateCaptain.class.getSimpleName());
 		addStartNpc(PATHFINDER);
 		addTalkId(PATHFINDER);
 		addKillId(ZAKEN_60, ZAKEN_83);
 		addFirstTalkId(CANDLE);
 	}
 	
-	private void enterInstance(L2PcInstance player, String template, boolean is83)
+	@Override
+	public void onEnterInstance(L2PcInstance player, InstanceWorld world, boolean firstEntrance)
 	{
-		InstanceWorld world = InstanceManager.getInstance().getPlayerWorld(player);
-		
-		if (world != null)
+		if (firstEntrance)
 		{
-			if (world instanceof CavernOfThePirateCaptainWorld)
-			{
-				teleportPlayer(player, ENTER_LOC[getRandom(ENTER_LOC.length)], world.getInstanceId(), false);
-				return;
-			}
-			player.sendPacket(SystemMessageId.YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON);
-			return;
-		}
-		
-		if (checkConditions(player, is83))
-		{
-			world = new CavernOfThePirateCaptainWorld();
-			world.setInstanceId(InstanceManager.getInstance().createDynamicInstance(template));
-			world.setTemplateId(is83 ? TEMPLATE_ID_83 : TEMPLATE_ID_60);
-			world.setStatus(0);
-			InstanceManager.getInstance().addWorld(world);
 			final CavernOfThePirateCaptainWorld curworld = (CavernOfThePirateCaptainWorld) world;
-			curworld._is83 = is83;
+			curworld._is83 = curworld.getTemplateId() == TEMPLATE_ID_83;
 			curworld.storeTime = System.currentTimeMillis();
 			
 			if (!player.isInParty())
@@ -216,26 +187,21 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 			}
 			manageNpcSpawn(curworld);
 		}
+		else
+		{
+			teleportPlayer(player, ENTER_LOC[getRandom(ENTER_LOC.length)], world.getInstanceId(), false);
+		}
 	}
 	
 	private void managePlayerEnter(L2PcInstance player, CavernOfThePirateCaptainWorld world)
 	{
-		if (!world._is83)
-		{
-			player.stopAllEffectsExceptThoseThatLastThroughDeath();
-			final L2Summon pet = player.getPet();
-			if (pet != null)
-			{
-				pet.stopAllEffectsExceptThoseThatLastThroughDeath();
-			}
-			player.getServitors().values().forEach(L2Summon::stopAllEffectsExceptThoseThatLastThroughDeath);
-		}
 		world.playersInside.add(player);
 		world.addAllowed(player.getObjectId());
 		teleportPlayer(player, ENTER_LOC[getRandom(ENTER_LOC.length)], world.getInstanceId(), false);
 	}
 	
-	private boolean checkConditions(L2PcInstance player, boolean is83)
+	@Override
+	protected boolean checkConditions(L2PcInstance player)
 	{
 		if (player.canOverrideCond(PcCondOverride.INSTANCE_CONDITIONS))
 		{
@@ -248,6 +214,7 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 			return false;
 		}
 		
+		final boolean is83 = InstanceManager.getInstance().getPlayerWorld(player).getTemplateId() == TEMPLATE_ID_83 ? true : false;
 		final L2Party party = player.getParty();
 		final boolean isInCC = party.isInCommandChannel();
 		final List<L2PcInstance> members = (isInCC) ? party.getCommandChannel().getMembers() : party.getMembers();
@@ -317,11 +284,11 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 	{
 		if (event.equals("enter60"))
 		{
-			enterInstance(player, "CavernOfThePirateCaptainWorldDay60.xml", false);
+			enterInstance(player, new CavernOfThePirateCaptainWorld(), "CavernOfThePirateCaptainWorldDay60.xml", TEMPLATE_ID_60);
 		}
 		else if (event.equals("enter83"))
 		{
-			enterInstance(player, "CavernOfThePirateCaptainWorldDay83.xml", true);
+			enterInstance(player, new CavernOfThePirateCaptainWorld(), "CavernOfThePirateCaptainWorldDay83.xml", TEMPLATE_ID_83);
 		}
 		else
 		{
@@ -335,9 +302,9 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 				{
 					case "BURN_BLUE":
 					{
-						if (npc.getRightHandItem() == 0)
+						if (npc.isState(0))
 						{
-							npc.setRHandId(FIRE);
+							npc.setState(1); // Burning
 							startQuestTimer("BURN_BLUE2", 3000, npc, player);
 							if (world._blueFounded == 4)
 							{
@@ -348,27 +315,27 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 					}
 					case "BURN_BLUE2":
 					{
-						if (npc.getRightHandItem() == FIRE)
+						if (npc.isState(1)) // Burning
 						{
-							npc.setRHandId(BLUE);
+							npc.setState(3); // Blue glow
 						}
 						break;
 					}
 					case "BURN_RED":
 					{
-						if (npc.getRightHandItem() == 0)
+						if (npc.isState(0))
 						{
-							npc.setRHandId(FIRE);
+							npc.setState(1); // Burning
 							startQuestTimer("BURN_RED2", 3000, npc, player);
 						}
 						break;
 					}
 					case "BURN_RED2":
 					{
-						if (npc.getRightHandItem() == FIRE)
+						if (npc.isState(1)) // Burning
 						{
 							final int room = getRoomByCandle(npc);
-							npc.setRHandId(RED);
+							npc.setState(2); // Red glow
 							manageScreenMsg(world, NpcStringId.THE_CANDLES_CAN_LEAD_YOU_TO_ZAKEN_DESTROY_HIM);
 							spawnNpc(world._is83 ? DOLL_BLADER_83 : DOLL_BLADER_60, room, player, world);
 							spawnNpc(world._is83 ? VALE_MASTER_83 : VALE_MASTER_60, room, player, world);
@@ -404,7 +371,6 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 		if ((tmpworld != null) && (tmpworld instanceof CavernOfThePirateCaptainWorld))
 		{
 			final CavernOfThePirateCaptainWorld world = (CavernOfThePirateCaptainWorld) tmpworld;
-			final Instance inst = InstanceManager.getInstance().getInstance(world.getInstanceId());
 			
 			if (npc.getId() == ZAKEN_83)
 			{
@@ -437,9 +403,7 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 					}
 				}
 			}
-			saveReenterForPlayers(world);
-			inst.setDuration(300000);
-			inst.setEmptyDestroyTime(0);
+			finishInstance(world);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
@@ -504,7 +468,7 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 		{
 			if ((players != null) && (players.getInstanceId() == world.getInstanceId()))
 			{
-				showOnScreenMsg(players, stringId, 2, 6000);
+				showOnScreenMsg(players, stringId, 5, 6000);
 			}
 		}
 	}
@@ -539,57 +503,5 @@ public class CavernOfThePirateCaptain extends AbstractNpcAI
 		world._zaken = spawnNpc(world._is83 ? ZAKEN_83 : ZAKEN_60, world._zakenRoom, null, world);
 		world._zaken.setInvisible(true);
 		world._zaken.setIsParalyzed(true);
-	}
-	
-	private void saveReenterForPlayers(InstanceWorld world)
-	{
-		final Calendar reenter = Calendar.getInstance();
-		reenter.set(Calendar.MINUTE, MINUTES);
-		reenter.set(Calendar.HOUR_OF_DAY, HOURS);
-		
-		if (reenter.getTimeInMillis() <= System.currentTimeMillis())
-		{
-			reenter.add(Calendar.DAY_OF_MONTH, 1);
-		}
-		
-		if ((reenter.get(Calendar.DAY_OF_WEEK) <= DAY_A) || (reenter.get(Calendar.DAY_OF_WEEK) > DAY_C))
-		{
-			while (reenter.get(Calendar.DAY_OF_WEEK) != DAY_A)
-			{
-				reenter.add(Calendar.DAY_OF_MONTH, 1);
-			}
-		}
-		else if (reenter.get(Calendar.DAY_OF_WEEK) <= DAY_B)
-		{
-			while (reenter.get(Calendar.DAY_OF_WEEK) != DAY_B)
-			{
-				reenter.add(Calendar.DAY_OF_MONTH, 1);
-			}
-		}
-		else
-		{
-			while (reenter.get(Calendar.DAY_OF_WEEK) != DAY_C)
-			{
-				reenter.add(Calendar.DAY_OF_MONTH, 1);
-			}
-		}
-		
-		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.INSTANT_ZONE_S1_S_ENTRY_HAS_BEEN_RESTRICTED_YOU_CAN_CHECK_THE_NEXT_POSSIBLE_ENTRY_TIME_BY_USING_THE_COMMAND_INSTANCEZONE);
-		sm.addString(InstanceManager.getInstance().getInstanceIdName(world.getTemplateId()));
-		
-		for (int objectId : world.getAllowed())
-		{
-			final L2PcInstance player = L2World.getInstance().getPlayer(objectId);
-			InstanceManager.getInstance().setInstanceTime(objectId, world.getTemplateId(), reenter.getTimeInMillis());
-			if ((player != null) && player.isOnline())
-			{
-				player.sendPacket(sm);
-			}
-		}
-	}
-	
-	public static void main(String[] args)
-	{
-		new CavernOfThePirateCaptain();
 	}
 }

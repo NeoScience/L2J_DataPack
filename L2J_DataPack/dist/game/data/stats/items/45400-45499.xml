@@ -176,6 +176,8 @@
 	<item id="45433" name="NC Dinos Hat Appearance Stone" additionalName="30-day" type="EtcItem">
 		<!-- Changes the appearance of a hair accessory into that of an NC Dinos Hat (30-day). Works for item with the same number of slots. You need an appearance item, which remains intact after its appearance is extracted. An appearance-modified item has no change in abilities. Double-click to use.\n\nWarning: When changed to the appearance of a female-only hair accessory, it cannot be equipped by a male character. -->
 		<set name="icon" val="BranchSys3.Icon.g_shape_shifting_hair1" />
+		<set name="immediate_effect" val="true" />
+		<set name="handler" val="Appearance" />
 		<set name="time" val="2592000" />
 	</item>
 	<item id="45434" name="NC Dinos Hat Appearance Stone Pack (30-day)" additionalName="" type="EtcItem">
@@ -186,6 +188,8 @@
 	<item id="45435" name="NC Dinos Uniform Appearance Stone" additionalName="30-day" type="EtcItem">
 		<!-- Changes the appearance of your armor into that of an NC Dinos Uniform. 30-day. Tops and one-pieces only. -->
 		<set name="icon" val="BranchSys3.icon1.g_scrl_change_chest" />
+		<set name="immediate_effect" val="true" />
+		<set name="handler" val="Appearance" />
 		<set name="time" val="2592000" />
 	</item>
 	<item id="45436" name="NC Dinos Uniform Appearance Stone Pack (30-day)" additionalName="" type="EtcItem">
@@ -240,6 +244,7 @@
 		<set name="icon" val="icon.etc_whiteday_herb" />
 		<set name="weight" val="5" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="POTION" />
 	</item>
 	<item id="45444" name="Scroll of Escape: Blazing Swamp" additionalName="" type="EtcItem">
 		<!-- Teleports you to the Blazing Swamp. -->
@@ -253,6 +258,7 @@
 		<set name="weight" val="30" />
 		<set name="is_stackable" val="true" />
 		<set name="time" val="1800" />
+		<set name="commissionItemType" val="SCROLL_OTHER" />
 	</item>
 	<item id="45446" name="Visitation Scroll: Hellbound" additionalName="30-min" type="EtcItem">
 		<!-- A protection scroll made by the Black Marketeer of Mammon using counterfeit Atelia. When used, a character Lv. 98 or below can stay in Hellbound. -->
@@ -266,6 +272,7 @@
 		<set name="weight" val="30" />
 		<set name="is_stackable" val="true" />
 		<set name="time" val="5400" />
+		<set name="commissionItemType" val="SCROLL_OTHER" />
 	</item>
 	<item id="45448" name="Visitation Scroll: Hellbound" additionalName="90-min" type="EtcItem">
 		<!-- A protection scroll made by the Black Marketeer of Mammon using counterfeit Atelia. When used, a character Lv. 98 or below can stay in Hellbound. -->
@@ -410,26 +417,31 @@
 		<!-- Double-click to get a Crafted Fish. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.fish_normal_i04" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45474" name="Fresh Minnow" additionalName="" type="EtcItem">
 		<!-- Double-click to get a Crafted Fish. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.fish_normal_i03" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45475" name="Fresh Flatfish" additionalName="" type="EtcItem">
 		<!-- Double-click to get a Crafted Fish. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.fish_normal_i06" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45476" name="Fresh Mandarin Fish" additionalName="" type="EtcItem">
 		<!-- Double-click to get a Crafted Fish. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.fish_normal_i05" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45477" name="Fresh Rockfish" additionalName="" type="EtcItem">
 		<!-- Double-click to get a Crafted Fish. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.fish_normal_i08" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45478" name="Fresh Goldfish" additionalName="" type="EtcItem">
 		<!-- Double-click to get a Crafted Fish. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
@@ -465,6 +477,7 @@
 		<!-- Double-click to get a Fish Pearl. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.fish_normal_i13" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45485" name="Fresh Whale" additionalName="" type="EtcItem">
 		<!-- Double-click to get a Fish Pearl. You can use this as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
@@ -493,16 +506,19 @@
 		<!-- Can be used as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.etc_fish_scale_i01" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45490" name="Fish Pearl" additionalName="" type="EtcItem">
 		<!-- Can be used as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.etc_giran_fish_scale_i00" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45491" name="Fresh Whale Blubber" additionalName="" type="EtcItem">
 		<!-- Can be used as a crafting ingredient or trade for an appearance modification item through a fishing guild member. -->
 		<set name="icon" val="icon.etc_fish_oil_i02" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45492" name="Normal Fishing Rod" additionalName="30-day" type="Weapon">
 		<!-- A 30-day fishing rod. Consumes 1 Fishing Shot. -->
@@ -526,6 +542,7 @@
 		<!-- A sturdy fishing rod. Consumes 1 Fishing Shot. -->
 		<set name="icon" val="icon.NOIMAGE" />
 		<set name="default_action" val="EQUIP" />
+		<set name="commissionItemType" val="OTHER_WEAPON" />
 		<for>
 			<add stat="pAtk" val="1.0" />
 			<add stat="mAtk" val="1.0" />
@@ -542,6 +559,7 @@
 		<!-- Special bait for fishing. Use to catch shiny fish. -->
 		<set name="icon" val="icon.etc_gludio_fish_lure_i00" />
 		<set name="is_stackable" val="true" />
+		<set name="commissionItemType" val="OTHER_ITEM" />
 	</item>
 	<item id="45497" name="Fishing Shot (Not in Use)" additionalName="" type="EtcItem">
 		<!-- Soulshot for fishing rods. Doubles the fishing success rate. -->
